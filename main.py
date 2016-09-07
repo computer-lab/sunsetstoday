@@ -1,6 +1,5 @@
 import json
-import urllib2
-from pprint import pprint
+from urllib.request import urlopen
 import datetime
 from dateutil import tz
 import pytz
@@ -32,8 +31,8 @@ def twitter_api(consumer_key, consumer_secret, access_token, access_token_secret
 def bullshit():
     url = 'http://api.sunrise-sunset.org/json?lat=40.6970074&lng=-73.9284384&date=today&formatted=0'
 
-    response = urllib2.urlopen(url)
-    data = json.load(response)
+    response = urlopen(url).read()
+    data = json.loads(response.decode('utf-8'))
     sunset = data["results"]["sunset"]
 
     eastern = datetime.datetime.strptime(sunset[:-6], '%Y-%m-%dT%H:%M:%S').replace(tzinfo = pytz.UTC).astimezone(pytz.timezone('America/New_York'))
@@ -44,8 +43,8 @@ def bullshit():
     utc_sunset = datetime.datetime.strptime(sunset[:-6], '%Y-%m-%dT%H:%M:%S').replace(tzinfo = pytz.UTC)
     sun_has_set_delta = datetime.datetime.combine(datetime.date.today(), eastern_sunset_time) - datetime.datetime.combine(datetime.date.today(), current_eastern)
     sun_has_set_delta = str(sun_has_set_delta)
-    print current_eastern
-    print eastern_sunset_time
+    print(current_eastern)
+    print(eastern_sunset_time)
     if current_eastern > eastern_sunset_time:
         sun_has_set = True
         sun_has_set_delta, fuckoff = str(sun_has_set_delta).split('.')
@@ -92,7 +91,7 @@ def bullshit():
     else:
         ss_minutes = ss_minutes+' minutes'
 
-    print sun_has_set
+    print(sun_has_set)
     return actual_time, hours, minutes, sun_has_set, sun_has_set_delta, ss_minutes, ss_hours
 
 
@@ -106,7 +105,6 @@ while True:
     eastern_now = datetime.datetime.utcnow().replace(tzinfo = pytz.UTC).astimezone(pytz.timezone('America/New_York')).time()
     if eastern_now > on_time and eastern_now < off_time:
         actual_time, hours, minutes, sun_has_set, sun_has_set_delta, ss_minutes, ss_hours = bullshit()
-        print actual_time, hours, minutes, sun_has_set, sun_has_set_delta, ss_minutes, ss_hours
         api = twitter_api(consumer_key, consumer_secret, access_token, access_token_secret)
         if sun_has_set is False:
             h = ['the sun sets '+hours+' and '+minutes+', at '+actual_time,
@@ -135,7 +133,7 @@ while True:
                 t = (random.choice(m))
             else:
                 t = (random.choice(h))
-                print t
+                print(t)
                 api.update_status(status=t)
                 time.sleep(random.randint(6200,6900))
         else:
@@ -151,11 +149,11 @@ while True:
                 t = (random.choice(m))
             else:
                 t = (random.choice(h))
-                print t
+                print(t)
                 api.update_status(status=t)
                 time.sleep(random.randint(7200,7600))
 
     else:
-        print 'sleep'
+        print('sleep')
         time.sleep(600)
 
