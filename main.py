@@ -110,7 +110,7 @@ while True:
             h = ['the sun sets '+hours+' and '+minutes+', at '+actual_time,
                     "at "+actual_time+", the sun sets ... that's like in "+hours,
                     "in "+hours+" and "+minutes+", the sun is gonna set",
-                    "it is gonna be dark in about "+hours,
+                    "it is gonna be dark in about "+hours, 'oh my fucking god',
                     "at "+actual_time+", which is like in "+hours+", the sun is gonna set",
                     "the sun goes down at "+actual_time+" today, which is like in "+hours,
                     "it is going to start to get dark in "+hours,
@@ -134,23 +134,29 @@ while True:
             else:
                 t = (random.choice(h))
                 print(t)
-                api.update_status(status=t)
+                try:
+                    api.update_status(status=t)
+                except tweepy.error.TweepError as e:
+                    print('duplicate status')
                 time.sleep(random.randint(6200,6900))
         else:
             h = ['the sun set at like '+ss_hours+' ago',
-                    'the sun went down today at '+ss_hours+' ago',
+                    'the sun went down today '+ss_hours+' ago',
                     'it got dark outside about '+ss_hours+' ago',
-                    'sun went down '+ss_hours+' ago']
+                    'sun went down '+ss_hours+' ago', 'fuck', '...fuck']
             m = ['the sun set  '+ss_minutes+' ago',
                     'the sun went down today '+ss_minutes+' ago',
                     'it got dark outside about '+ss_minutes+' ago',
-                    'sun went down '+ss_minutes+' ago']
+                    'sun went down '+ss_minutes+' ago', 'fuck...']
             if ss_hours == 'no':
                 t = (random.choice(m))
             else:
                 t = (random.choice(h))
                 print(t)
-                api.update_status(status=t)
+                try:
+                    api.update_status(status=t)
+                except tweepy.error.TweepError as e:
+                    print('duplicate status')
                 time.sleep(random.randint(7200,7600))
 
     else:
