@@ -32,7 +32,12 @@ def bullshit():
     url = 'http://api.sunrise-sunset.org/json?lat=40.6970074&lng=-73.9284384&date=today&formatted=0'
 
     response = urlopen(url).read()
-    data = json.loads(response.decode('utf-8'))
+    try:
+        data = json.loads(response.decode('utf-8'))
+    except ValueError as e:
+        print("Error parsing time")
+        return
+
     sunset = data["results"]["sunset"]
 
     eastern = datetime.datetime.strptime(sunset[:-6], '%Y-%m-%dT%H:%M:%S').replace(tzinfo = pytz.UTC).astimezone(pytz.timezone('America/New_York'))
