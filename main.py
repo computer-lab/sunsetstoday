@@ -1,7 +1,6 @@
 import json
 from urllib.request import urlopen
 import datetime
-from dateutil import tz
 import pytz
 import random
 import time
