@@ -9,7 +9,6 @@ verify_ssl = true
 pytz = "*"
 tweepy = "*"
 requests = "*"
-python-dateutils = "*"
 
 [requires]
 python_version = "3.6"
